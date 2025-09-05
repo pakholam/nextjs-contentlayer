@@ -11,13 +11,15 @@ interface LenisProviderProps {
 export function LenisProvider({ easingKey }: LenisProviderProps) {
   useEffect(() => {
     const selected = easings[easingKey]
-    const lenis = new Lenis({
-      duration: selected.duration || 0.8,
-      easing: selected.fn,
-      syncTouch: true,         // 移动端手指滑动
-      touchMultiplier: 1,      // 手指滑动速度倍率
-    })
 
+    const lenis = new Lenis({
+      duration: 0.4,        // 尾部缓动时间略长
+      easing: selected.fn,  // 缓动曲线
+      lerp: 0.05,           // 尾部跟随更慢一点
+      syncTouch: true,
+      touchMultiplier: 1.5, // 滑动速度略慢一点
+      wheelMultiplier: 1,
+    })
 
     function raf(time: number) {
       lenis.raf(time)
@@ -29,7 +31,7 @@ export function LenisProvider({ easingKey }: LenisProviderProps) {
     return () => {
       lenis.destroy()
     }
-  }, [easingKey]) // 注意依赖数组，改变 easingKey 会重新初始化 Lenis
+  }, [easingKey])
 
   return null
 }
