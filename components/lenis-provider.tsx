@@ -12,13 +12,17 @@ export function LenisProvider({ easingKey }: LenisProviderProps) {
   useEffect(() => {
     const selected = easings[easingKey]
 
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
     const lenis = new Lenis({
       duration: 0.4,        // 尾部缓动时间略长
-      easing: selected.fn,  // 缓动曲线
-      lerp: 0.05,           // 尾部跟随更慢一点
-      syncTouch: true,
-      touchMultiplier: 1.5, // 滑动速度略慢一点
+      easing: selected.fn,
+      lerp: 0.05,           // 桌面端尾部跟随慢一点
+      syncTouch: true,      
+      syncTouchLerp: isTouchDevice ? 0.15 : undefined,  // 移动端平滑跟随，解决慢滑跳动
+      touchMultiplier: 1,    // 恢复正常滑动距离
       wheelMultiplier: 1,
+      smoothWheel: true,
     })
 
     function raf(time: number) {
