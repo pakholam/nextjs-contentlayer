@@ -1,11 +1,11 @@
-﻿"use client"
+﻿"use client";
 
-import { useState } from "react"
-import { ChevronDown } from "lucide-react"
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface EasingSelectorProps {
-  easingKey: string
-  onChange: (key: string) => void
+  easingKey: string;
+  onChange: (key: string) => void;
 }
 
 // 完整 40+ 曲线，中文 + key
@@ -66,13 +66,13 @@ export const easingFunctions = [
   { key: "easeOutBounce", label: "弹跳缓出 (Bounce Out)" },
   { key: "easeInOutBounce", label: "弹跳缓入缓出 (Bounce InOut)" },
   { key: "easeOutInBounce", label: "弹跳缓出缓入 (Bounce OutIn)" },
-]
+];
 
 export default function EasingSelector({ easingKey, onChange }: EasingSelectorProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const linearItem = easingFunctions[0]
-  const otherItems = easingFunctions.slice(1)
+  const linearItem = easingFunctions[0];
+  const otherItems = easingFunctions.slice(1);
 
   return (
     <div className="relative inline-block text-left">
@@ -86,41 +86,50 @@ export default function EasingSelector({ easingKey, onChange }: EasingSelectorPr
 
       {open && (
         <div
-        className="absolute mt-2 w-[960px] rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 max-h-80 overflow-y-auto z-50 p-2"
-        onWheel={(e) => e.stopPropagation()} // 阻止事件冒泡到 Lenis
-      >
+          className="absolute mt-2 max-w-[95vw] w-auto rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 max-h-80 overflow-x-auto overflow-y-auto z-50 p-2"
+          onWheel={(e) => e.stopPropagation()}
+        >
           {/* Linear 单独一行 */}
           <div
             className={`px-2 py-1 cursor-pointer text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap ${
               easingKey === linearItem.key ? "font-bold text-blue-600" : ""
             }`}
             onClick={() => {
-              onChange(linearItem.key)
-              setOpen(false)
+              onChange(linearItem.key);
+              setOpen(false);
             }}
           >
             {linearItem.label}
           </div>
 
-          {/* 其他曲线四列排列 */}
-          <div className="grid grid-cols-4 gap-2 mt-2">
-            {otherItems.map((item) => (
-              <div
-                key={item.key}
-                className={`px-2 py-1 cursor-pointer text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap ${
-                  easingKey === item.key ? "font-bold text-blue-600" : ""
-                }`}
-                onClick={() => {
-                  onChange(item.key)
-                  setOpen(false)
-                }}
-              >
-                {item.label}
+          {/* 按分组渲染其他曲线 */}
+          {["Quad", "Cubic", "Quart", "Quint", "Expo", "Circ", "Back", "Elastic", "Bounce"].map((group) => {
+            const items = otherItems.filter((item) => item.label.includes(group));
+            if (items.length === 0) return null;
+            return (
+              <div key={group} className="mt-3">
+                <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">{group}</div>
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-2">
+                  {items.map((item) => (
+                    <div
+                      key={item.key}
+                      className={`px-2 py-1 cursor-pointer text-sm rounded hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap ${
+                        easingKey === item.key ? "font-bold text-blue-600" : ""
+                      }`}
+                      onClick={() => {
+                        onChange(item.key);
+                        setOpen(false);
+                      }}
+                    >
+                      {item.label}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       )}
     </div>
-  )
+  );
 }
