@@ -14,7 +14,8 @@ export function LenisProvider({ easingKey }: LenisProviderProps) {
     const lenis = new Lenis({
       duration: selected.duration || 0.8,
       easing: selected.fn,
-      smoothWheel: true,   // 鼠标滚轮平滑
+      syncTouch: true,         // 移动端手指滑动
+      touchMultiplier: 1,      // 手指滑动速度倍率
     })
 
 
