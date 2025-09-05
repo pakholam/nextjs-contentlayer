@@ -1,3 +1,4 @@
+// app/posts/[...slug]/page.tsx
 import { notFound } from "next/navigation"
 import { allPosts } from "contentlayer/generated"
 

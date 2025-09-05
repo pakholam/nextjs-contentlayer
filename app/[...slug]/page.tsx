@@ -1,3 +1,4 @@
+// app/[...slug]/page.tsx
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import { allPages } from "contentlayer/generated"
